@@ -1,0 +1,67 @@
+<html>
+<body>
+
+<h4>Web Browser Denial-of-service</h4>
+<p>
+Javascript UI Denial-of-service attacks
+</p>
+<p>
+1. Infinite alert loop 
+<button onclick="dosLoopAlert()">Loop Alert</button>
+</p>
+<p>
+2. Annoying moving window 
+<button onclick="dosWindowOpenMove()">Moving Window</button>
+</p>
+<p>
+3. Focus window on click 
+<button onclick="dosFocusWindow()">Focus Window</button>
+</p>
+<p>
+[ Close window (Method 2, 3) ]
+<button onclick="dosWindowClose()">Close Window</button>
+</p>
+<script type="text/javascript">
+function dosLoopAlert() {
+	const messages = [
+		'Hi there!',
+		'Welcome to my awesome website',
+		'I am glad that you made it here',
+		'While I have you trapped here, listen up!',
+		'Once upon a time...'
+	]
+	for (; ; ) {
+		messages.forEach(window.alert)
+	}
+}
+var winArr = []
+function dosWindowOpenMove() {
+	const win = window.open('', '', 'width=100,height=100')
+	let i = 0
+	setInterval(() => {
+		win.moveTo(i, i)
+		win.resizeTo(100, 100)
+		i = (i + 5) % 200
+	}, 1000)
+	winArr.push(win)
+}
+function dosFocusWindow() {
+	const win = window.open('', '', 'width=100,height=100')
+	setInterval(() => {
+		win.focus()
+	}, 1000)
+	//winArr.forEach(win => {
+		//if (!win.closed) win.focus()
+	//})
+	winArr.push(win)
+}
+function dosWindowClose() {
+	winArr.forEach(win => {
+		win.close()
+	})
+	winArr.length = 0
+}
+</script>
+
+</body>
+</html>
